@@ -4,17 +4,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import spark.Request;
 import spark.Response;
 
 public class AuthenticationServices {
-
+	
 	public static String login(Request req, Response resp) {
-		String username = new Gson().fromJson(req.body(), JsonObject.class).get("username").toString();
-		String password = new Gson().fromJson(req.body(), JsonObject.class).get("password").toString();
+		System.out.println("HELLO => " + req.attributes());
+		String username = req.queryParams("username");
+		String password = req.queryParams("password");
+		System.out.println("OVOXO => " + username + "; " + password);
 		
 		if(canUserLogIn(username,password)){
 			resp.body("Successfully logged in");
@@ -27,12 +26,12 @@ public class AuthenticationServices {
 	}
 
 	public static String logout(Request req, Response resp) {
-		String username = new Gson().fromJson(req.body(), JsonObject.class).get("username").toString();
+		String username = req.queryParams("username");
 		setToken(username, false);
 		return "";
 	}
 	
-	private static boolean canUserLogIn(String username, String password){
+	private static boolean canUserLogIn(String username, String password) {
 		String query = "SELECT token FROM users WHERE username = ? AND password = ?";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
@@ -50,13 +49,14 @@ public class AuthenticationServices {
 		return false;
 	}
 	
-	private static void setToken(String username, boolean token){
+	private static void setToken(String username, boolean token) {
 		String query = "UPDATE users SET token = ? WHERE username = ?";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setBoolean(1, token);
 			stmnt.setString(2, username);
-			ResultSet rs = stmnt.executeQuery();
+			@SuppressWarnings("unused")
+			int rs = stmnt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
