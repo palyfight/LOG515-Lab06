@@ -1,13 +1,22 @@
 package LOG515.lab06;
 
 import java.sql.DriverManager;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import java.sql.SQLException;
+import java.sql.Connection;
 
 public class DbSingleton {
 
-	private MysqlDataSource dataSource = new MysqlDataSource();
-	dataSource.setUser();
-	dataSource.setUser();
-	dataSource.setUser();
+	private static Connection dbConnection = null;
+	
+	public static Connection getDbConnection(){
+		try {
+			if(dbConnection == null){
+				dbConnection = DriverManager.getConnection(Utils.DBHOST, Utils.DBUSER, Utils.DBPASS);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dbConnection;
+	}
 }
