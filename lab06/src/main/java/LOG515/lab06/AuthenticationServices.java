@@ -10,12 +10,11 @@ import spark.Response;
 public class AuthenticationServices {
 	
 	public static String login(Request req, Response resp) {
-		System.out.println("HELLO => " + req.attributes());
-		String username = req.queryParams("username");
-		String password = req.queryParams("password");
-		System.out.println("OVOXO => " + username + "; " + password);
+		String username = req.params(":username");
+		String password = req.params(":password");
 		
 		if(canUserLogIn(username,password)){
+			setToken(username, true);
 			resp.body("Successfully logged in");
 			resp.status(200);
 			return "Successfully logged in";
@@ -26,9 +25,26 @@ public class AuthenticationServices {
 	}
 
 	public static String logout(Request req, Response resp) {
-		String username = req.queryParams("username");
+		String username = req.params(":username");
 		setToken(username, false);
 		return "";
+	}
+	
+	public static boolean canUserLogIn(String username){
+		String query = "SELECT token FROM users WHERE username = ?";
+		try {
+			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
+			stmnt.setString(1, username);
+			ResultSet rs = stmnt.executeQuery();
+			if(rs.next()){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+
 	}
 	
 	private static boolean canUserLogIn(String username, String password) {
@@ -39,7 +55,6 @@ public class AuthenticationServices {
 			stmnt.setString(2, password);
 			ResultSet rs = stmnt.executeQuery();
 			if(rs.next()){
-				setToken(username, true);
 				return true;
 			}
 		} catch (SQLException e) {
