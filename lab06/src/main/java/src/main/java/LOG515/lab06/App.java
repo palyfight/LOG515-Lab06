@@ -26,7 +26,7 @@ public class App
         post("/login/:username/:password", (req, res) -> {/*res.redirect("/new/route");*/ return AuthenticationServices.login(req, res);});
         
         before("/logout/:username", (req, res) -> {
-			String username = req.params(":usernae");
+			String username = req.params(":username");
 			
 			if(AuthenticationServices.canUserLogIn(username)){
 				halt(401, "Go away you hax3r!!!");

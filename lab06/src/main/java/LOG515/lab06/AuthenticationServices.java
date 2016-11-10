@@ -26,8 +26,14 @@ public class AuthenticationServices {
 
 	public static String logout(Request req, Response resp) {
 		String username = req.params(":username");
-		setToken(username, false);
-		return "";
+		if(setToken(username, false)){
+			resp.body("Successfully logged out");
+			resp.status(200);
+			return "Successfuly logged out";
+		};
+		resp.body("Could not log you out!!!");
+		resp.status(404);
+		return "Could not log you out";
 	}
 	
 	public static boolean canUserLogIn(String username){
@@ -35,6 +41,7 @@ public class AuthenticationServices {
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setString(1, username);
+			System.out.println(stmnt.toString());
 			ResultSet rs = stmnt.executeQuery();
 			if(rs.next()){
 				return true;
@@ -64,17 +71,20 @@ public class AuthenticationServices {
 		return false;
 	}
 	
-	private static void setToken(String username, boolean token) {
+	private static boolean setToken(String username, boolean token) {
 		String query = "UPDATE users SET token = ? WHERE username = ?";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setBoolean(1, token);
 			stmnt.setString(2, username);
+			System.out.println(stmnt.toString());
 			@SuppressWarnings("unused")
 			int rs = stmnt.executeUpdate();
+			return rs == 0;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
 	}
 }
