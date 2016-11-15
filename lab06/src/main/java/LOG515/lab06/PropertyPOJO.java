@@ -48,6 +48,10 @@ public class PropertyPOJO {
 		this.description = description;
 		this.nbapparts = nbapparts;
 	}
+	
+	public PropertyPOJO(){
+		
+	}
 
 	private String idProperty;
 	private String address;
