@@ -14,10 +14,10 @@ public class PropertyPOJO {
 		this.address = address;
 	}
 	public String getPostalcode() {
-		return postalcode;
+		return postalCode;
 	}
 	public void setPostalcode(String postalcode) {
-		this.postalcode = postalcode;
+		this.postalCode = postalcode;
 	}
 	public String getDescription() {
 		return description;
@@ -26,27 +26,27 @@ public class PropertyPOJO {
 		this.description = description;
 	}
 	public String getNbapparts() {
-		return nbapparts;
+		return nbAppartments;
 	}
 	public void setNbapparts(String nbapparts) {
-		this.nbapparts = nbapparts;
+		this.nbAppartments = nbapparts;
 	}
 	
 	public PropertyPOJO(String address, String postalcode, String description, String nbapparts) {
 		super();
 		this.address = address;
-		this.postalcode = postalcode;
+		this.postalCode = postalcode;
 		this.description = description;
-		this.nbapparts = nbapparts;
+		this.nbAppartments = nbapparts;
 	}
 
 	public PropertyPOJO(String idProperty, String address, String postalcode, String description, String nbapparts) {
 		super();
 		this.idProperty = idProperty;
 		this.address = address;
-		this.postalcode = postalcode;
+		this.postalCode = postalcode;
 		this.description = description;
-		this.nbapparts = nbapparts;
+		this.nbAppartments = nbapparts;
 	}
 	
 	public PropertyPOJO(){
@@ -55,9 +55,9 @@ public class PropertyPOJO {
 
 	private String idProperty;
 	private String address;
-	private String postalcode;
+	private String postalCode;
 	private String description;
-	private String nbapparts;
+	private String nbAppartments;
 	
 	
 }
