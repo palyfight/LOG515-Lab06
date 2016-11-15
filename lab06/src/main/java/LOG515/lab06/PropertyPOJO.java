@@ -1,10 +1,10 @@
 package LOG515.lab06;
 
 public class PropertyPOJO {
-	public String getIdProperty() {
+	public int getIdProperty() {
 		return idProperty;
 	}
-	public void setIdProperty(String idProperty) {
+	public void setIdProperty(int idProperty) {
 		this.idProperty = idProperty;
 	}
 	public String getAddress() {
@@ -40,7 +40,7 @@ public class PropertyPOJO {
 		this.nbAppartments = nbapparts;
 	}
 
-	public PropertyPOJO(String idProperty, String address, String postalCode, String description, String nbAppartments) {
+	public PropertyPOJO(int idProperty, String address, String postalCode, String description, String nbAppartments) {
 		super();
 		this.idProperty = idProperty;
 		this.address = address;
@@ -53,7 +53,7 @@ public class PropertyPOJO {
 		
 	}
 
-	private String idProperty;
+	private int idProperty;
 	private String address;
 	private String postalCode;
 	private String description;

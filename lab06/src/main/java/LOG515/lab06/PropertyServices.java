@@ -4,14 +4,20 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-import spark.Request;
-import spark.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mysql.jdbc.Statement;
+
+import spark.Request;
+import spark.Response;
 
 public class PropertyServices {
 	
@@ -30,6 +36,12 @@ public class PropertyServices {
 		resp.body("Could not save property");
 		resp.status(404);
 		return "Could not save property";
+	}
+	
+	public static JSONArray getProperties(Request req, Response resp) throws JSONException{
+		Gson gson = new Gson();
+		String data = gson.toJson(fetchProperties(),new TypeToken<ArrayList<PropertyPOJO>>() {}.getType());
+		return new JSONArray(data);
 	}
 	
 	private static int saveProperty(PropertyPOJO property){
@@ -59,6 +71,28 @@ public class PropertyServices {
 			e.printStackTrace();
 		}
 		return propertyId;
+	}
+	
+	private static ArrayList<PropertyPOJO> fetchProperties(){
+		String query = "SELECT * FROM properties";
+		try {
+			PreparedStatement stmnt  = DbSingleton.getDbConnection().prepareStatement(query);
+			ResultSet rs = stmnt.executeQuery();
+			ArrayList<PropertyPOJO> properties = new ArrayList<PropertyPOJO>();
+			while(rs.next()){
+				properties.add(new PropertyPOJO(
+						rs.getInt("id"),
+						rs.getString("address"),
+						rs.getString("postalcode"),
+						rs.getString("description"),
+						rs.getString("nbapparts")
+						));
+			}
+			return properties;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

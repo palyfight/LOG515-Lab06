@@ -36,5 +36,6 @@ public class App {
         });
         post("/logout/:username", (req, res) -> {return AuthenticationServices.logout(req, res);});
         post("/property/save", (req, res) -> {return PropertyServices.addProperty(req, res);});
+        post("/properties", (req, res) -> {return PropertyServices.getProperties(req, res);});
     }
 }
