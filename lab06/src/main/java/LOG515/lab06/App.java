@@ -37,5 +37,7 @@ public class App {
         post("/logout/:username", (req, res) -> {return AuthenticationServices.logout(req, res);});
         post("/property/save", (req, res) -> {return PropertyServices.addProperty(req, res);});
         post("/properties", (req, res) -> {return PropertyServices.getProperties(req, res);});
+        post("/user/:userid/:role/property", (req, res) -> {return PropertyServices.getPropertiesByUser(req, res);});
+        post("/property/:userid/:propertyid/claim", (req, res) -> {return PropertyServices.claimProperty(req, res);});
     }
 }
