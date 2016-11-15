@@ -18,15 +18,13 @@ public class PropertyServices {
 		int propertyId = saveProperty(address, postalcode, description, nbapparts);
 		
 		if(propertyId != 0){
-			//setToken(username, true);
-			//System.out.println("YOLO => " + new Gson().toJson(user));
 			resp.body("id:"+propertyId);
 			resp.status(200);
 			return "id:"+propertyId;
 		}
-		resp.body("Could not log in");
+		resp.body("Could not save property");
 		resp.status(404);
-		return "Could not log in";
+		return "Could not save property";
 	}
 	
 	private static int saveProperty(String address, String postalCode, String description, String nbapparts){
@@ -38,7 +36,7 @@ public class PropertyServices {
 			stmnt.setString(2, postalCode);
 			stmnt.setString(3, description);
 			stmnt.setString(4, nbapparts);
-			//System.out.println(stmnt.toString());
+
 			int rs = stmnt.executeUpdate();
 			if( rs == 0){
 				throw new SQLException("Adding property with address: " + address + " failed!");
@@ -48,7 +46,7 @@ public class PropertyServices {
 	            	propertyId = generatedKeys.getInt(1);
 	            }
 	            else {
-	                throw new SQLException("Creating user failed, no ID obtained.");
+	                throw new SQLException("Adding property failed, no ID obtained.");
 	            }
 	        }
 		} catch (SQLException e) {
