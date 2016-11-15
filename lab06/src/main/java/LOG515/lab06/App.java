@@ -28,5 +28,6 @@ public class App {
 			}
         });
         post("/logout/:username", (req, res) -> {return AuthenticationServices.logout(req, res);});
+        post("/property/:address/:postalcode/:description/:nbapparts", (req, res) -> {return PropertyServices.addProperty(req, res);});
     }
 }
