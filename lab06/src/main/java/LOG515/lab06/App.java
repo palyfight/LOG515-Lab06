@@ -2,23 +2,30 @@ package LOG515.lab06;
 
 import static spark.Spark.*;
 import LOG515.lab06.AuthenticationServices;
+import spark.Spark;
 
 public class App {
     public static void main( String[] args )
-    {
-    	/*before(new Filter(){
-    		public void handle(Request req, Response res){
-    			String username = req.params(":usernae");
-    			String password = req.params(":password");
-    			
-    			if(!AuthenticationServices.canUserLogIn(username, password)){
-    				halt(401, "Go away you hax3r!!!");
-    			}
-    		}
-    	});*/
-    	
+    {	
+    	port(1738);
+    	Spark.options("/*", (request, response) -> {
+
+    	    String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+    	    if (accessControlRequestHeaders != null) {
+    	        response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+    	    }
+
+    	    String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+    	    if (accessControlRequestMethod != null) {
+    	        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+    	    }
+    	    return "OK";
+    	});
+
+    	Spark.before((request, response) -> {response.header("Access-Control-Allow-Origin", "*");});
+    
     	get("/hello", (req, res) -> "Hello world!");
-        post("/login/:username/:password", (req, res) -> {/*res.redirect("/new/route");*/ return AuthenticationServices.login(req, res);});
+        post("/login/:username/:password", (req, res) -> {return AuthenticationServices.login(req, res);});
         
         before("/logout/:username", (req, res) -> {
    String username = req.params(":username");
