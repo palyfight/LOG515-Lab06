@@ -67,6 +67,16 @@ public class PropertyServices {
 		resp.status(404);
 		return "Could not save property";
 	}
+	
+	public static String unclaimProperty(Request req, Response resp){
+		int userid = Integer.parseInt(req.params(":userid"));
+		int propertyid = Integer.parseInt(req.params(":propertyid"));
+
+		deletePropertiesUser(userid, propertyid);
+
+		resp.status(200);
+		return "";
+	}
 
 	private static int saveProperty(PropertyPOJO property){
 		int propertyId = 0;
@@ -157,6 +167,20 @@ public class PropertyServices {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	
+	
+	private static void deletePropertiesUser(int userid, int propertyid) {
+		String query = "DELETE FROM property_user where userid = ? and propertyid = ?";
+		try {
+			PreparedStatement stmnt  = DbSingleton.getDbConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			stmnt.setInt(1, propertyid);
+			stmnt.setInt(2, userid);
+			stmnt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 
