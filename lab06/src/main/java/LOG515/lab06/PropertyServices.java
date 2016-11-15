@@ -11,6 +11,7 @@ import spark.Response;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.jdbc.Statement;
 
 public class PropertyServices {
 	
@@ -35,11 +36,11 @@ public class PropertyServices {
 		int propertyId = 0;
 		String query = "INSERT INTO properties (address, postalcode, description, nbapparts) VALUES (?,?,?,?)";
 		try {
-			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
+			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			stmnt.setString(1, property.getAddress());
-			stmnt.setString(2, property.getPostalcode());
+			stmnt.setString(2, property.getPostalCode());
 			stmnt.setString(3, property.getDescription());
-			stmnt.setString(4, property.getNbapparts());
+			stmnt.setString(4, property.getNbAppartments());
 
 			int rs = stmnt.executeUpdate();
 			if( rs == 0){
