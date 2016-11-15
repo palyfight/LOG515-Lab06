@@ -1,5 +1,6 @@
 package LOG515.lab06;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,15 +8,18 @@ import java.sql.SQLException;
 import spark.Request;
 import spark.Response;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class PropertyServices {
 	
-	public static String addProperty(Request req, Response resp) {
-		String address = req.params(":address");
-		String postalcode = req.params(":postalcode");
-		String description = req.params(":description");
-		String nbapparts = req.params(":nbapparts");
+	public static String addProperty(Request req, Response resp) throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
 		
-		int propertyId = saveProperty(address, postalcode, description, nbapparts);
+		PropertyPOJO property = mapper.readValue(req.body(), PropertyPOJO.class);
+		
+		int propertyId = saveProperty(property);
 		
 		if(propertyId != 0){
 			resp.body("id:"+propertyId);
@@ -27,19 +31,19 @@ public class PropertyServices {
 		return "Could not save property";
 	}
 	
-	private static int saveProperty(String address, String postalCode, String description, String nbapparts){
+	private static int saveProperty(PropertyPOJO property){
 		int propertyId = 0;
 		String query = "INSERT INTO properties (address, postalcode, description, nbapparts) VALUES (?,?,?,?)";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
-			stmnt.setString(1, address);
-			stmnt.setString(2, postalCode);
-			stmnt.setString(3, description);
-			stmnt.setString(4, nbapparts);
+			stmnt.setString(1, property.getAddress());
+			stmnt.setString(2, property.getPostalcode());
+			stmnt.setString(3, property.getDescription());
+			stmnt.setString(4, property.getNbapparts());
 
 			int rs = stmnt.executeUpdate();
 			if( rs == 0){
-				throw new SQLException("Adding property with address: " + address + " failed!");
+				throw new SQLException("Adding property with address: " + property.getAddress() + " failed!");
 			}
 	        try (ResultSet generatedKeys = stmnt.getGeneratedKeys()) {
 	            if (generatedKeys.next()) {
