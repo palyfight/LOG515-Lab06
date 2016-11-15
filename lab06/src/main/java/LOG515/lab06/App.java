@@ -17,15 +17,15 @@ public class App {
     		}
     	});*/
     	
-        get("/hello", (req, res) -> "Hello world!");
+    	get("/hello", (req, res) -> "Hello world!");
         post("/login/:username/:password", (req, res) -> {/*res.redirect("/new/route");*/ return AuthenticationServices.login(req, res);});
         
         before("/logout/:username", (req, res) -> {
-			String username = req.params(":username");
-			
-			if(AuthenticationServices.canUserLogIn(username)){
-				halt(401, "Go away you hax3r!!!");
-			}
+   String username = req.params(":username");
+   
+   if(AuthenticationServices.canUserLogIn(username)){
+    halt(401, "Go away you hax3r!!!");
+   }
         });
         post("/logout/:username", (req, res) -> {return AuthenticationServices.logout(req, res);});
     }

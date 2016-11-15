@@ -2,7 +2,8 @@ package LOG515.lab06;
 
 public class UserPOJO {
 	String username;
-	//String password;
+	int userId;
+
 	boolean token;
 	String phone;
 	String role;
@@ -29,5 +30,11 @@ public class UserPOJO {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 }

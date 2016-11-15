@@ -21,7 +21,7 @@ public class AuthenticationServices {
 			System.out.println("YOLO => " + new Gson().toJson(user));
 			resp.body(new Gson().toJson(user));
 			resp.status(200);
-			return "Successfully logged in";
+			return resp.body();
 		}
 		resp.body("Could not log in");
 		resp.status(404);
@@ -30,7 +30,7 @@ public class AuthenticationServices {
 	
 	private static UserPOJO getUser(String uname, String pwd){
 		UserPOJO user = new UserPOJO();
-		String query = "SELECT username, token, phone, role FROM users WHERE username = ? AND password = ?";
+		String query = "SELECT id, username, token, phone, role FROM users WHERE username = ? AND password = ?";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setString(1, uname);
@@ -42,6 +42,7 @@ public class AuthenticationServices {
 				user.setPhone(rs.getString("phone"));
 				user.setRole(rs.getString("role"));
 				user.setToken(rs.getBoolean("token"));
+				user.setUserId(rs.getInt("id"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
