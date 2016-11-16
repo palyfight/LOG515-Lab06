@@ -58,7 +58,7 @@ public class PropertyServices {
 
 		int id = insertPropertiesUser(userid, propertyid);
 		
-		if(id != 0){
+		if(id != -1){
 			resp.body("id:"+id);
 			resp.status(200);
 			return "id:"+id;
@@ -79,7 +79,7 @@ public class PropertyServices {
 	}
 
 	private static int saveProperty(PropertyPOJO property){
-		int propertyId = 0;
+		int propertyId = -1;
 		String query = "INSERT INTO properties (address, postalcode, description, nbapparts) VALUES (?,?,?,?)";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
