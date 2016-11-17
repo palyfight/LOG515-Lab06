@@ -5,8 +5,13 @@ import LOG515.lab06.AuthenticationServices;
 import spark.Spark;
 
 public class App {
-	public static void main(String[] args) {
+	public static void main(String[] args) {        
 		port(1738);
+		
+		staticFileLocation("../log515-frontend"); //path to primary index.html
+		webSocket("/chat", ChatWebSocketHandler.class);
+        init();
+        
 		Spark.options("/*", (request, response) -> {
 
 			String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
@@ -65,5 +70,6 @@ public class App {
 		post("/signup/:username/:password/:phone/:role", (req, res) -> {
 			return AuthenticationServices.signup(req, res);
 		});
+		
 	}
 }
