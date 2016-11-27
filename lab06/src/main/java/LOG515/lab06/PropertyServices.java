@@ -217,6 +217,35 @@ public class PropertyServices {
 		}
 		return null;
 	}
+	
+	public static JSONArray getUsers(Request req, Response res){
+		String query = "SELECT * from users";
+		try {
+			PreparedStatement stmnt  = DbSingleton.getDbConnection().prepareStatement(query);
+			ResultSet rs = stmnt.executeQuery();
+			ArrayList<UserPOJO> users = new ArrayList<UserPOJO>();
+			while(rs.next()){
+				users.add(new UserPOJO(
+						rs.getString("username"),
+						rs.getString("phone"),
+						rs.getString("role"),
+						rs.getBoolean("token"),
+						rs.getString("email")
+						));
+			}
+
+			Gson gson = new Gson();
+			String data = gson.toJson(users,new TypeToken<ArrayList<UserPOJO>>() {}.getType());
+			return new JSONArray(data);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }
 
 class SomePOJO{

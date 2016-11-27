@@ -124,7 +124,7 @@ public class AuthenticationServices {
 	
 	private static UserPOJO getUser(String uname, String pwd){
 		UserPOJO user = new UserPOJO();
-		String query = "SELECT id, username, token, phone, role FROM users WHERE username = ? AND password = ?";
+		String query = "SELECT id, username, token, phone, role, email FROM users WHERE username = ? AND password = ?";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setString(1, uname);
@@ -137,6 +137,7 @@ public class AuthenticationServices {
 				user.setRole(rs.getString("role"));
 				user.setToken(rs.getBoolean("token"));
 				user.setUserId(rs.getInt("id"));
+				user.setEmail(rs.getString("email"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -150,8 +151,9 @@ public class AuthenticationServices {
 		String password = req.params(":password");
 		String phone = req.params(":phone");
 		String role = req.params(":role");
+		String email = req.params(":email");
 		
-		UserPOJO user = new UserPOJO(username, phone, role, true);
+		UserPOJO user = new UserPOJO(username, phone, role, true, email);
 		if(saveUser(user, password) != -1){
 			resp.body("Successfully added new user");
 			resp.status(200);
@@ -193,7 +195,7 @@ public class AuthenticationServices {
 
 	private static int saveUser(UserPOJO user, String password){
 		int userId = -1;
-		String query = "INSERT INTO users (username, password, token, phone, role) VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO users (username, password, token, phone, role, email) VALUES (?,?,?,?,?,?)";
 		try {
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			stmnt.setString(1, user.getUsername());
@@ -201,6 +203,7 @@ public class AuthenticationServices {
 			stmnt.setBoolean(3, user.getToken());
 			stmnt.setString(4, user.getPhone());
 			stmnt.setString(5, user.getRole());
+			stmnt.setString(6, user.getEmail());
 
 			int rs = stmnt.executeUpdate();
 			if( rs == 0){

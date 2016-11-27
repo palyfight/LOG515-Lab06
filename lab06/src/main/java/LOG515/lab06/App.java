@@ -67,7 +67,7 @@ public class App {
 			return PropertyServices.unclaimProperty(req, res);
 		});
 		
-		post("/signup/:username/:password/:phone/:role", (req, res) -> {
+		post("/signup/:username/:password/:phone/:role/:email", (req, res) -> {
 			return AuthenticationServices.signup(req, res);
 		});
 		
@@ -93,6 +93,10 @@ public class App {
 		
 		get("/property/:id", (req, res) -> {
 			return PropertyServices.getPropertyById(req, res);
+		});
+		
+		get("/users", (req, res) -> {
+			return PropertyServices.getUsers(req, res);
 		});
 	}
 }

@@ -6,14 +6,24 @@ public class UserPOJO {
 	boolean token;
 	String phone;
 	String role;
-	
+	String email;
+
 	UserPOJO(){}
 	
-	UserPOJO(String username, String phone, String role, boolean token){
+	UserPOJO(String username, String phone, String role, boolean token, String email){
 		this.username = username;
 		this.phone = phone;
 		this.role = role;
 		this.token = token;
+		this.email = email;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	public String getUsername() {
