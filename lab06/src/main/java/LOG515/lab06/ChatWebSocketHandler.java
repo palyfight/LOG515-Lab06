@@ -1,4 +1,7 @@
 package	LOG515.lab06;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
 
@@ -8,7 +11,8 @@ public class ChatWebSocketHandler {
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        String username = "User" + Chat.nextUserNumber++;
+    	Map<String, List<String>> q = user.getUpgradeRequest().getParameterMap();
+        String username = q.get("user").get(0);
         Chat.userUsernameMap.put(user, username);
         Chat.broadcastMessage(sender = "Server", msg = (username + " joined the chat"));
     }
