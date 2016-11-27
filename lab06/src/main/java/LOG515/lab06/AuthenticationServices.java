@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.mysql.jdbc.Statement;
 
@@ -27,6 +30,96 @@ public class AuthenticationServices {
 		resp.body("Could not log in");
 		resp.status(404);
 		return "Could not log in";
+	}
+	
+	public static JSONObject androidLogin(Request req, Response resp) {
+		String phone = "";
+		String password = "";
+		
+		try {
+			JSONObject obj1 = new JSONObject(req.body());
+			phone = obj1.getString("phone");
+			password = obj1.getString("password");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("phone => " + phone);
+		System.out.println("password => " + password);
+		
+		JSONObject obj = new JSONObject();
+		try {
+			if(phone.equals("5147467719") && password.equals("1234")){
+				obj.put("success", true);
+			}
+			else{
+				obj.put("success", false);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
+	public static JSONObject androidRegister(Request req, Response resp) {
+		String phone_number = "";
+		String country_code = "";
+		
+		try {
+			JSONObject obj1 = new JSONObject(req.body());
+			phone_number = obj1.getString("phone_number");
+			country_code = obj1.getString("country_code");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("phone_number => " + phone_number);
+		System.out.println("country_code => " + country_code);
+		
+		JSONObject obj = new JSONObject();
+		try {
+			if(phone_number.equals("5141234567") && country_code.equals("1")){
+				obj.put("success", true);
+			}
+			else{
+				obj.put("success", false);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return obj;
+	}
+	
+	public static JSONObject androidVerify(Request req, Response resp) {
+		String verification_code = "";
+		
+		try {
+			JSONObject obj1 = new JSONObject(req.body());
+			verification_code = obj1.getString("verification_code");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("verification_code => " + verification_code);
+		
+		JSONObject obj = new JSONObject();
+		try {
+			if(verification_code.equals("12345")){
+				obj.put("success", true);
+			}
+			else{
+				obj.put("success", false);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return obj;
 	}
 	
 	private static UserPOJO getUser(String uname, String pwd){

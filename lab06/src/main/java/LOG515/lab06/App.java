@@ -71,5 +71,28 @@ public class App {
 			return AuthenticationServices.signup(req, res);
 		});
 		
+		post("/android/login", (req, res) -> {
+			System.out.println("HELLO WORD");
+			return AuthenticationServices.androidLogin(req, res);
+		});
+		
+		post("/android/register", (req, res) -> {
+			System.out.println("YOLLO IS THE MOTTO");
+			return AuthenticationServices.androidRegister(req, res);
+		});
+		
+		post("/android/verify", (req, res) -> {
+			System.out.println("SOLO DOLO");
+			return AuthenticationServices.androidVerify(req, res);
+		});
+		
+		post("/property/verify", (req, res) -> {
+			System.out.println("SOLO DOLO");
+			return AuthenticationServices.androidVerify(req, res);
+		});
+		
+		get("/property/:id", (req, res) -> {
+			return PropertyServices.getPropertyById(req, res);
+		});
 	}
 }

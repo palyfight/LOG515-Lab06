@@ -169,7 +169,6 @@ public class PropertyServices {
 		return -1;
 	}
 	
-	
 	private static void deletePropertiesUser(int userid, int propertyid) {
 		String query = "DELETE FROM property_user where userid = ? and propertyid = ?";
 		try {
@@ -182,6 +181,129 @@ public class PropertyServices {
 			e.printStackTrace();
 		}
 	}
+	
+	public static JSONArray getPropertyById(Request req, Response resp){
+		String query = "SELECT p.id as propertyId, p.address, p.postalcode, p.description, p.nbapparts, u.id as userId ,u.username, u.phone, u.role, pu.doornumber from (properties as p, users as u) JOIN property_user pu ON p.id = pu.propertyid WHERE p.id = ? and u.id = pu.userid";
+		int propertyId = Integer.parseInt(req.params(":id"));
+		
+		try {
+			PreparedStatement stmnt  = DbSingleton.getDbConnection().prepareStatement(query);
+			stmnt.setInt(1, propertyId);
+			ResultSet rs = stmnt.executeQuery();
+			ArrayList<SomePOJO> properties = new ArrayList<SomePOJO>();
+			while(rs.next()){
+				properties.add(new SomePOJO(
+						rs.getInt("propertyId"),
+						rs.getString("address"),
+						rs.getString("postalcode"),
+						rs.getString("description"),
+						rs.getString("nbapparts"),
+						rs.getInt("userId"),
+						rs.getString("username"),
+						rs.getString("phone"),
+						rs.getString("role"),
+						rs.getString("doornumber")
+						));
+			}
 
+			Gson gson = new Gson();
+			String data = gson.toJson(properties,new TypeToken<ArrayList<SomePOJO>>() {}.getType());
+			return new JSONArray(data);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+}
 
+class SomePOJO{
+	int propertyId;
+	String address;
+	String postalCode;
+	String description;
+	String nbapparts;
+	int userId;
+	String username;
+	String phone;
+	String role;
+	String doorNumber;
+	
+	public SomePOJO(){}
+	
+	public SomePOJO(int pId, String address, String postalCode, String desc, String nbApt, int uId, String uname, String phone, String role, String doorNumba){
+		this.propertyId = pId;
+		this.address = address;
+		this.postalCode = postalCode;
+		this.description = desc;
+		this.nbapparts = nbApt;
+		this.userId = uId;
+		this.username = uname;
+		this.phone = phone;
+		this.role = role;
+		this.doorNumber = doorNumba;
+	}
+	
+	public int getPropertyId() {
+		return propertyId;
+	}
+	public void setPropertyId(int propertyId) {
+		this.propertyId = propertyId;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getNbapparts() {
+		return nbapparts;
+	}
+	public void setNbapparts(String nbapparts) {
+		this.nbapparts = nbapparts;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public String getDoorNumber() {
+		return doorNumber;
+	}
+	public void setDoorNumber(String doorNumber) {
+		this.doorNumber = doorNumber;
+	}
 }
