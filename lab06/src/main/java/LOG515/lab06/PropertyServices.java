@@ -72,10 +72,13 @@ public class PropertyServices {
 		int userid = Integer.parseInt(req.params(":userid"));
 		int propertyid = Integer.parseInt(req.params(":propertyid"));
 
-		deletePropertiesUser(userid, propertyid);
+		if(deletePropertiesUser(userid, propertyid)){
+			resp.status(200);
+			return "Successfully unclaimed property";
+		}
 
-		resp.status(200);
-		return "";
+		resp.status(404);
+		return "Could not unclaim property";
 	}
 
 	private static int saveProperty(PropertyPOJO property){
@@ -169,17 +172,19 @@ public class PropertyServices {
 		return -1;
 	}
 	
-	private static void deletePropertiesUser(int userid, int propertyid) {
+	private static boolean deletePropertiesUser(int userid, int propertyid) {
 		String query = "DELETE FROM property_user where userid = ? and propertyid = ?";
 		try {
 			PreparedStatement stmnt  = DbSingleton.getDbConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			stmnt.setInt(1, propertyid);
-			stmnt.setInt(2, userid);
-			stmnt.executeUpdate();
+			stmnt.setInt(1, userid);
+			stmnt.setInt(2, propertyid);
+			int result = stmnt.executeUpdate();
+			return result > 0;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	public static JSONArray getPropertyById(Request req, Response resp){
