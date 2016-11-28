@@ -59,11 +59,11 @@ public class App {
 			return PropertyServices.getPropertiesByUser(req, res);
 		});
 		
-		get("/property/:userid/:propertyid/claim", (req, res) -> {
+		post("/property/:userid/:propertyid/claim", (req, res) -> {
 			return PropertyServices.claimProperty(req, res);
 		});
 		
-		get("/property/:userid/:propertyid/unclaim", (req, res) -> {
+		post("/property/:userid/:propertyid/unclaim", (req, res) -> {
 			return PropertyServices.unclaimProperty(req, res);
 		});
 		
@@ -91,7 +91,7 @@ public class App {
 			return AuthenticationServices.androidVerify(req, res);
 		});
 		
-		get("/property/:id", (req, res) -> {
+		get("/property/one/:id", (req, res) -> {
 			return PropertyServices.getPropertyById(req, res);
 		});
 		
