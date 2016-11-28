@@ -65,27 +65,34 @@ public class AuthenticationServices {
 	
 	public static JSONObject androidRegister(Request req, Response resp) {
 		String phone_number = "";
-		String country_code = "";
+		String pwd = "";
+		String fname = "";
+		String lname = "";
 		
 		try {
 			JSONObject obj1 = new JSONObject(req.body());
-			phone_number = obj1.getString("phone_number");
-			country_code = obj1.getString("country_code");
+			JSONObject obj2 = obj1.getJSONObject("client");
+			phone_number = obj2.getString("phone");
+			pwd = obj2.getString("password");
+			fname = obj2.getString("firstName");
+			lname = obj2.getString("lastName");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		System.out.println("phone_number => " + phone_number);
-		System.out.println("country_code => " + country_code);
+		System.out.println("pwd => " + pwd);
+		System.out.println("fname => " + fname);
+		System.out.println("lname => " + lname);
 		
 		JSONObject obj = new JSONObject();
 		try {
-			if(phone_number.equals("5141234567") && country_code.equals("1")){
-				obj.put("success", true);
+			if(phone_number.equals("5141234567")){
+				obj.put("ok", true);
 			}
 			else{
-				obj.put("success", false);
+				obj.put("ok", false);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
