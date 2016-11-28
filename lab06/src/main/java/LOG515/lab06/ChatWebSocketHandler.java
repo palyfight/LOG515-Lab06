@@ -14,7 +14,6 @@ public class ChatWebSocketHandler {
     	Map<String, List<String>> q = user.getUpgradeRequest().getParameterMap();
         String username = q.get("user").get(0);
         Chat.userUsernameMap.put(user, username);
-        Chat.broadcastMessage(sender = "Server", msg = (username + " joined the chat"));
     }
 
     @OnWebSocketClose

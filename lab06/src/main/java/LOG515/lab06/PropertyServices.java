@@ -176,7 +176,6 @@ public class PropertyServices {
 			stmnt.setInt(1, propertyid);
 			stmnt.setInt(2, userid);
 			stmnt.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

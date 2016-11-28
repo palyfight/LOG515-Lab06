@@ -19,8 +19,8 @@ public class Chat {
         userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
             try {
                 session.getRemote().sendString(String.valueOf(new JSONObject()
-                    .put("userMessage", createHtmlMessageFromSender(sender, message))
-                    .put("userlist", userUsernameMap.values())
+                    .put("userMessage", message)
+                    .put("userlist", sender)
                 ));
             } catch (Exception e) {
                 e.printStackTrace();
