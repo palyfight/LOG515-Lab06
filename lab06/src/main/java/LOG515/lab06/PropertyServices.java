@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -52,20 +53,25 @@ public class PropertyServices {
 		return new JSONArray(data);
 	}
 	
-	public static String claimProperty(Request req, Response resp){
+	public static JSONObject claimProperty(Request req, Response resp){
 		int userid = Integer.parseInt(req.params(":userid"));
 		int propertyid = Integer.parseInt(req.params(":propertyid"));
 
 		int id = insertPropertiesUser(userid, propertyid);
-		
+		JSONObject obj = new JSONObject();
 		if(id != -1){
-			resp.body("id:"+id);
+			try {
+				obj.put("id", id);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			resp.status(200);
-			return "id:"+id;
+			return obj;
 		}
 		resp.body("Could not save property");
 		resp.status(404);
-		return "Could not save property";
+		return null;
 	}
 	
 	public static String unclaimProperty(Request req, Response resp){
