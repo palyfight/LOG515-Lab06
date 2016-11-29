@@ -130,15 +130,17 @@ public class AuthenticationServices {
 	}
 	
 	private static UserPOJO getUser(String uname, String pwd){
-		UserPOJO user = new UserPOJO();
+		UserPOJO user = null;
 		String query = "SELECT id, username, token, phone, role, email FROM users WHERE username = ? AND password = ?";
 		try {
+			
 			PreparedStatement stmnt = DbSingleton.getDbConnection().prepareStatement(query);
 			stmnt.setString(1, uname);
 			stmnt.setString(2, pwd);
 			//System.out.println(stmnt.toString());
 			ResultSet rs = stmnt.executeQuery();
 			if(rs.next()){
+				user = new UserPOJO();
 				user.setUsername(rs.getString("username"));
 				user.setPhone(rs.getString("phone"));
 				user.setRole(rs.getString("role"));
