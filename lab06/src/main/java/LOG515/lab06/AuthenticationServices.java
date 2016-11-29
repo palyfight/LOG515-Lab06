@@ -20,7 +20,7 @@ public class AuthenticationServices {
 		String password = req.params(":password");
 		
 		UserPOJO user = getUser(username, password);
-		if(user != null /*canUserLogIn(username,password)*/){
+		if(user != null){
 			setToken(username, true);
 			System.out.println("YOLO => " + new Gson().toJson(user));
 			resp.body(new Gson().toJson(user));
@@ -159,10 +159,12 @@ public class AuthenticationServices {
 		String phone = req.params(":phone");
 		String role = req.params(":role");
 		String email = req.params(":email");
-		
+
 		UserPOJO user = new UserPOJO(username, phone, role, true, email);
 		if(saveUser(user, password) != -1){
+			setToken(username, true);
 			resp.body("Successfully added new user");
+			resp.body(new Gson().toJson(user));
 			resp.status(200);
 			return "Successfuly added new user";
 		}
